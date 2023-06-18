@@ -7,112 +7,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title><?= $title . ' | ' . service('settings')->get('Site.name') ?></title>
+    <title>Demo of Codeigniter HTMX form immediate server-side validation</title>
 
-    <link href="<?= site_url('css/styles.css') ?>" rel="stylesheet" /> <!-- čia bootstrap -->
-    <link href="<?= site_url('css/local_styles.css') ?>" rel="stylesheet" />
-    <?php /*<link href="<?= site_url('css/bootstrap-icons.css') ?>" rel="stylesheet" />*/ ?>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?= site_url('css/datatables.min.css') ?>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= base_url('js/scripts.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-    <script src="<?= base_url('js/jquery-3.5.1.min.js') ?>"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
-    <script src="<?= base_url('js/datatables.min.js') ?>"></script>
-
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script defer  src="<?= base_url('js/htmx.min.js') ?>"></script>
-    <script defer src="https://unpkg.com/htmx.org/dist/ext/disable-element.js"></script>
-    <script>
-        // htmx headers
-        htmx.defineExtension('ajax-header', {
-            onEvent: function(name, evt) {
-                if (name === "htmx:configRequest") {
-                    evt.detail.headers['X-Requested-With'] = 'XMLHttpRequest';
-                }
-            }
-        });
-    </script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/disable-element.js"></script>
 
 </head>
 
-<body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" hx-boost="true" href="<?= site_url() ?>"><?= service('settings')->get('Site.name') ?></a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="bi bi-view-list" style="font-size: 1.3rem;"></i></button>
-        <!-- Navbar Search-->
-
-
-        <?= $this->include('common/user_menu') ?>
-
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">CI-HTMX-form demo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="<?= site_url('fragment/create') ?>">Form</a>
+                </div>
+            </div>
+        </div>
     </nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
 
-            <!-- sb-sidebar-dark buvo originalas -->
-            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+    <div class="container">
 
-                <?= $this->include('common/sidebar_menu') ?>
-
-                <div class="sb-sidenav-footer">
-                    <div class="small">Prisijungėte kaip:</div>
-                    <?= $_SESSION['first_name'] ?> <?= $_SESSION['last_name'] ?>
-                </div>
-            </nav>
-        </div>
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <div id="infoMessage"><?php echo $message; ?></div>
-
-
-                    <?= $this->renderSection('content') ?>
-
-
-                </div>
-            </main>
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">&copy; Donatas Glodenis, 2021-<?php echo date('Y') ?></div>
-                        <div hx-boost="true">
-                            <a href="<?= base_url('pages/terms') ?>">Naudojimosi sąlygos</a>
-                            &middot;
-                            <a href="<?= base_url('pages/manual') ?>">Naudojimosi sistema vadovas</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
+        <?= $this->renderSection('content') ?>
+    
     </div>
-
-
-    <?php if (in_array('tinymce', $includes)) { ?>
-        <script src="https://cdn.tiny.cloud/1/bk3sgosn5c698jq71s7svqpmompgkuzm2wr7knwb4ksxhv6t/tinymce/6/tinymce.min.js"></script>
-        <script>
-            tinymce.init({
-                selector: 'textarea.tinymce',
-                height: 300,
-                language: 'lt',
-                language_url: '<?= base_url("js/tinymce6-lt.js") ?>',
-                menubar: false,
-                plugins: 'code',
-                statusbar: false,
-                toolbar: 'undo redo ' +
-                    'bold italic alignleft aligncenter alignright alignjustify ' +
-                    'bullist numlist outdent indent removeformat code help',
-            });
-        </script>
-    <?php } ?>
-    <?php if (isset($scripts)) { //echo all scripts
-        echo $scripts;
-    } ?>
-
 </body>
 
 </html>

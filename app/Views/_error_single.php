@@ -1,0 +1,1 @@
+<div class="invalid-feedback" style="display:block;"><?= esc($error) ?></div>

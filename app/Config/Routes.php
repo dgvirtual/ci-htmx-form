@@ -30,6 +30,11 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+
+$routes->add('fragment/create', 'Fragment::create');
+$routes->add('fragment/save', 'Fragment::save');
+$routes->add('fragment/validateField/(:any)', 'Fragment::validateField/$1');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
